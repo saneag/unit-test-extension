@@ -5,8 +5,8 @@ import {
   checkIfTestFileExistsOrThrow,
   createTestFile,
   getEditorOrThrow,
+  resolveTestFilePath,
 } from "./helpers/testFileHelpers";
-import { createTestFileNameWithExtension } from "./helpers/fileNameHelpers";
 import { handleErrorMessage } from "./helpers/handleErrorMessages";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -21,8 +21,9 @@ export function activate(context: vscode.ExtensionContext) {
 
         checkIfIsTestFileOrThrow(fileNameWithPath);
 
-        const testFileNameWithPath =
-          createTestFileNameWithExtension(fileNameWithPath);
+        const testFileNameWithPath = await resolveTestFilePath(
+          fileNameWithPath
+        );
 
         await checkIfTestFileExistsOrThrow(testFileNameWithPath);
 
