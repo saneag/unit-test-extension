@@ -9,7 +9,7 @@ import { ExistingFileError } from "../errors/ExistingFileError";
 import { AlreadyTestFileError } from "../errors/AlreadyTestFileError";
 import { NoActiveEditorError } from "../errors/NoActiveEditorError";
 import { CreationFileError } from "../errors/CreationFileError";
-import { TEST_DIRECTORY_NAMES } from "../constants/common";
+import { TEST_DIRECTORY_NAMES, TEST_SCRIPT_REGEX } from "../constants/common";
 import { TestDirectoryMatch } from "../types/types";
 
 const isFileNotFoundError = (error: any): boolean => {
@@ -91,7 +91,7 @@ export const getEditorOrThrow = () => {
 };
 
 export const checkIfIsTestFileOrThrow = (fileNameWithPath: string) => {
-  const isTestFile = /\.test\.(js|ts)$/.test(fileNameWithPath);
+  const isTestFile = TEST_SCRIPT_REGEX.test(fileNameWithPath);
   const fileName = getFileNameWithExtension(fileNameWithPath);
 
   if (isTestFile) {
