@@ -3,7 +3,7 @@ import { UnitTestHelperCommands } from "./constants/commands";
 import {
   checkIfIsTestFileOrThrow,
   checkIfTestFileExistsOrThrow,
-  createTestFile,
+  createAndOpenTestFile,
   getEditorOrThrow,
   resolveTestFilePath,
 } from "./helpers/testFileHelpers";
@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         await checkIfTestFileExistsOrThrow(testFileNameWithPath);
 
-        await createTestFile(fileNameWithPath, testFileNameWithPath);
+        await createAndOpenTestFile(fileNameWithPath, testFileNameWithPath);
       } catch (error) {
         handleErrorMessage(error);
       }

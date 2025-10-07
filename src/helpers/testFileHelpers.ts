@@ -11,6 +11,7 @@ import { NoActiveEditorError } from "../errors/NoActiveEditorError";
 import { CreationFileError } from "../errors/CreationFileError";
 import { TEST_DIRECTORY_NAMES, TEST_SCRIPT_REGEX } from "../constants/common";
 import { TestDirectoryMatch } from "../types/types";
+import { UnitTestHelperCommands } from "../constants/commands";
 
 const isFileNotFoundError = (error: any): boolean => {
   return (
@@ -145,5 +146,27 @@ export const createTestFile = async (
         error instanceof Error ? error.message : String(error)
       }`
     );
+  }
+};
+
+export const openFileInEditor = async (filePath: string) => {
+  const document = await vscode.workspace.openTextDocument(
+    vscode.Uri.file(filePath)
+  );
+  await vscode.window.showTextDocument(document, { preview: false });
+};
+
+export const createAndOpenTestFile = async (
+  fileNameWithPath: string,
+  testFileNameWithPath: string
+): Promise<void> => {
+  await createTestFile(fileNameWithPath, testFileNameWithPath);
+
+  const isOpenFileInEditor = vscode.workspace
+    .getConfiguration()
+    .get<boolean>(UnitTestHelperCommands.openTestFileAfterCreation);
+
+  if (isOpenFileInEditor) {
+    await openFileInEditor(testFileNameWithPath);
   }
 };

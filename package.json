@@ -7,8 +7,9 @@
     "url": "https://github.com/saneag/unit-test-extension"
   },
   "icon": "assets/testify.png",
-  "description": "",
-  "version": "0.0.3",
+  "description": "A VSCode extension to help you create unit test files quickly and easily.",
+  "version": "0.0.4",
+  "pricing": "Free",
   "engines": {
     "vscode": "^1.104.0"
   },
@@ -20,10 +21,21 @@
   "contributes": {
     "commands": [
       {
-        "command": "unit-test-helper.createTestFile",
+        "command": "testify.createTestFile",
         "title": "Create Test File"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Testify",
+      "properties": {
+        "testify.openTestFileAfterCreation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically open the newly created test file in the editor after creation."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

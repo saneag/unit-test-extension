@@ -1,7 +1,8 @@
-const UNIT_TEST_HELPER_PREFIX = 'unit-test-helper';
+const TESTIFY_PREFIX = "testify";
 
-const RawUnitTestHelperCommands = {
-  createTestFile: 'createTestFile',
+const RawTestifyCommands = {
+  createTestFile: "createTestFile",
+  openTestFileAfterCreation: "openTestFileAfterCreation",
 };
 
 function GenericCommands<T extends Record<string, string>, P extends string>(
@@ -17,6 +18,6 @@ function GenericCommands<T extends Record<string, string>, P extends string>(
 }
 
 export const UnitTestHelperCommands = GenericCommands(
-  RawUnitTestHelperCommands,
-  UNIT_TEST_HELPER_PREFIX
+  RawTestifyCommands,
+  TESTIFY_PREFIX
 );
