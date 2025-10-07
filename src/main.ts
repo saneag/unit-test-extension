@@ -1,13 +1,13 @@
 import * as vscode from "vscode";
 import { UnitTestHelperCommands } from "./constants/commands";
+import { resolveTestFilePath } from "./helpers/directoryPathHelpers";
 import {
   checkIfIsTestFileOrThrow,
   checkIfTestFileExistsOrThrow,
-  createAndOpenTestFile,
   getEditorOrThrow,
-  resolveTestFilePath,
-} from "./helpers/testFileHelpers";
-import { handleErrorMessage } from "./helpers/handleErrorMessages";
+  handleErrorMessage,
+} from "./helpers/errorHandlers";
+import { createAndOpenTestFile } from "./helpers/createTestFileHelpers";
 
 export function activate(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand(
