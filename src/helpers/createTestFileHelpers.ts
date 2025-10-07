@@ -98,7 +98,7 @@ export const createAndOpenTestFile = async (
 
   const isOpenFileInEditor = vscode.workspace
     .getConfiguration()
-    .get<boolean>(UnitTestHelperCommands.openTestFileAfterCreation);
+    .get<boolean>(UnitTestHelperCommands.openTestFile);
 
   if (isOpenFileInEditor) {
     await openFileInEditor(testFileNameWithPath);

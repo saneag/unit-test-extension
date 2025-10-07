@@ -2,7 +2,7 @@ const TESTIFY_PREFIX = "testify";
 
 const RawTestifyCommands = {
   createTestFile: "createTestFile",
-  openTestFileAfterCreation: "openTestFileAfterCreation",
+  openTestFile: "openTestFile",
 };
 
 function GenericCommands<T extends Record<string, string>, P extends string>(

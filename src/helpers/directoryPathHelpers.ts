@@ -77,7 +77,7 @@ export const checkIfTestFileExistsAndOpen = async (filePath: string) => {
     }
   } catch (error: any) {
     if (isFileNotFoundError(error)) {
-      return;
+      return false;
     }
 
     throw error;

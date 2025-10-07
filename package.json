@@ -8,7 +8,7 @@
   },
   "icon": "assets/testify.png",
   "description": "A VSCode extension to help you create unit test files quickly and easily.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "pricing": "Free",
   "engines": {
     "vscode": "^1.104.0"
@@ -23,13 +23,17 @@
       {
         "command": "testify.createTestFile",
         "title": "Create Test File"
+      },
+      {
+        "command": "testify.openTestFile",
+        "title": "Open Test File"
       }
     ],
     "configuration": {
       "type": "object",
       "title": "Testify",
       "properties": {
-        "testify.openTestFileAfterCreation": {
+        "testify.openTestFile": {
           "type": "boolean",
           "default": true,
           "description": "Automatically open the newly created test file in the editor after creation."
