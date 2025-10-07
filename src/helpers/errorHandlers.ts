@@ -52,19 +52,3 @@ export const checkIfIsTestFileOrThrow = (fileNameWithPath: string) => {
     );
   }
 };
-
-export const checkIfTestFileExistsOrThrow = async (filePath: string) => {
-  try {
-    const fileStat = await vscode.workspace.fs.stat(vscode.Uri.file(filePath));
-
-    if (fileStat) {
-      throw new ExistingFileError(`Test file already exists: ${filePath}`);
-    }
-  } catch (error: any) {
-    if (isFileNotFoundError(error)) {
-      return;
-    }
-
-    throw error;
-  }
-};

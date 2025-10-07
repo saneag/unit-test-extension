@@ -1,40 +1,13 @@
 import * as vscode from "vscode";
-import { UnitTestHelperCommands } from "./constants/commands";
-import { resolveTestFilePath } from "./helpers/directoryPathHelpers";
-import {
-  checkIfIsTestFileOrThrow,
-  checkIfTestFileExistsOrThrow,
-  getEditorOrThrow,
-  handleErrorMessage,
-} from "./helpers/errorHandlers";
-import { createAndOpenTestFile } from "./helpers/createTestFileHelpers";
+
+import { createTestFileCommand } from "./commands/createTestFileCommand";
 
 export function activate(context: vscode.ExtensionContext) {
-  const disposable = vscode.commands.registerCommand(
-    UnitTestHelperCommands.createTestFile,
-    async () => {
-      try {
-        const editor = getEditorOrThrow();
+  const commands = [createTestFileCommand];
 
-        const document = editor.document;
-        const fileNameWithPath = document.fileName;
-
-        checkIfIsTestFileOrThrow(fileNameWithPath);
-
-        const testFileNameWithPath = await resolveTestFilePath(
-          fileNameWithPath
-        );
-
-        await checkIfTestFileExistsOrThrow(testFileNameWithPath);
-
-        await createAndOpenTestFile(fileNameWithPath, testFileNameWithPath);
-      } catch (error) {
-        handleErrorMessage(error);
-      }
-    }
-  );
-
-  context.subscriptions.push(disposable);
+  for (const command of commands) {
+    context.subscriptions.push(command);
+  }
 }
 
 // This method is called when your extension is deactivated

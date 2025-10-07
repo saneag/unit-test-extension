@@ -4,6 +4,7 @@ import { createTestFileNameWithExtension } from "./fileNameHelpers";
 import { TEST_DIRECTORY_NAMES } from "../constants/common";
 import { TestDirectoryMatch } from "../types/types";
 import { isFileNotFoundError } from "./errorHandlers";
+import { openFileInEditor } from "./createTestFileHelpers";
 
 const findNearestTestDirectory = async (
   startDir: string
@@ -64,4 +65,21 @@ export const resolveTestFilePath = async (
   const targetFilePath = path.join(targetDir, path.basename(fileNameWithPath));
 
   return createTestFileNameWithExtension(targetFilePath);
+};
+
+export const checkIfTestFileExistsAndOpen = async (filePath: string) => {
+  try {
+    const fileStat = await vscode.workspace.fs.stat(vscode.Uri.file(filePath));
+
+    if (fileStat) {
+      await openFileInEditor(filePath);
+      return true;
+    }
+  } catch (error: any) {
+    if (isFileNotFoundError(error)) {
+      return;
+    }
+
+    throw error;
+  }
 };
