@@ -1,6 +1,11 @@
 {
   "name": "unit-test-helper",
-  "displayName": "Unit test helper",
+  "displayName": "Testify - Unit Test Helper",
+  "publisher": "san3a",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saneag/unit-test-extension"
+  },
   "description": "",
   "version": "0.0.1",
   "engines": {
