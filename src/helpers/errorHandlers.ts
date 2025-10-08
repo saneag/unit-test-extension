@@ -1,16 +1,12 @@
 import * as vscode from "vscode";
 
-import { AlreadyTestFileError } from "../errors/AlreadyTestFileError";
 import { CreationFileError } from "../errors/CreationFileError";
 import { ExistingFileError } from "../errors/ExistingFileError";
 import { NoActiveEditorError } from "../errors/NoActiveEditorError";
-import { TEST_SCRIPT_REGEX } from "../constants/common";
-import { getFileNameWithExtension } from "./fileNameHelpers";
 
 export const handleErrorMessage = (error: unknown) => {
   if (
     error instanceof ExistingFileError ||
-    error instanceof AlreadyTestFileError ||
     error instanceof NoActiveEditorError ||
     error instanceof CreationFileError
   ) {
@@ -40,15 +36,4 @@ export const getEditorOrThrow = () => {
   }
 
   return editor;
-};
-
-export const checkIfIsTestFileOrThrow = (fileNameWithPath: string) => {
-  const isTestFile = TEST_SCRIPT_REGEX.test(fileNameWithPath);
-  const fileName = getFileNameWithExtension(fileNameWithPath);
-
-  if (isTestFile) {
-    throw new AlreadyTestFileError(
-      `You are already in a test file: ${fileName}`
-    );
-  }
 };

@@ -1,13 +1,12 @@
 import * as vscode from "vscode";
+
 import { UnitTestHelperCommands } from "../constants/commands";
+import { getEditorOrThrow, handleErrorMessage } from "../helpers/errorHandlers";
 import {
-  checkIfIsTestFileOrThrow,
-  getEditorOrThrow,
-  handleErrorMessage,
-} from "../helpers/errorHandlers";
-import {
+  isTestFile,
   checkIfTestFileExistsAndOpen,
   resolveTestFilePath,
+  openSourceFileInEditorPrompt,
 } from "../helpers/directoryPathHelpers";
 import { createAndOpenTestFile } from "../helpers/createTestFileHelpers";
 
@@ -20,7 +19,10 @@ export const createTestFileCommand = vscode.commands.registerCommand(
       const document = editor.document;
       const fileNameWithPath = document.fileName;
 
-      checkIfIsTestFileOrThrow(fileNameWithPath);
+      if (isTestFile(fileNameWithPath)) {
+        await openSourceFileInEditorPrompt(fileNameWithPath, true);
+        return;
+      }
 
       const testFileNameWithPath = await resolveTestFilePath(fileNameWithPath);
 

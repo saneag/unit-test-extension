@@ -2,7 +2,8 @@ import * as vscode from "vscode";
 import path from "path";
 import { getFileNameWithoutExtension } from "./fileNameHelpers";
 import { CreationFileError } from "../errors/CreationFileError";
-import { UnitTestHelperCommands } from "../constants/commands";
+import { openFileInEditor } from "./directoryPathHelpers";
+import { TestifyProperties } from "../constants/properties";
 
 const isFunction = (line: string) => {
   const functionPattern = /^(export\s+)?(async\s+)?function\s+\w+/;
@@ -83,13 +84,6 @@ export const createTestFile = async (
   }
 };
 
-export const openFileInEditor = async (filePath: string) => {
-  const document = await vscode.workspace.openTextDocument(
-    vscode.Uri.file(filePath)
-  );
-  await vscode.window.showTextDocument(document, { preview: false });
-};
-
 export const createAndOpenTestFile = async (
   fileNameWithPath: string,
   testFileNameWithPath: string
@@ -99,7 +93,7 @@ export const createAndOpenTestFile = async (
   const shouldOpenFile =
     vscode.workspace
       .getConfiguration()
-      .get<boolean>(UnitTestHelperCommands.openTestFile) ?? true;
+      .get<boolean>(TestifyProperties.openTestFile) ?? true;
 
   if (shouldOpenFile) {
     await openFileInEditor(testFileNameWithPath);
