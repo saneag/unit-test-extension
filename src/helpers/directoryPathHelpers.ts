@@ -4,14 +4,19 @@ import {
   createTestFileNameWithExtension,
   getFileNameWithExtension,
 } from "./fileNameHelpers";
-import {
-  TEST_DIRECTORY_NAMES,
-  TEST_REGEX,
-  TEST_SCRIPT_REGEX,
-} from "../constants/common";
+import { TEST_REGEX, TEST_SCRIPT_REGEX } from "../constants/common";
 import { TestDirectoryMatch } from "../types/types";
 import { isFileNotFoundError } from "./errorHandlers";
 import { TestifyProperties } from "../constants/properties";
+
+export const TEST_DIRECTORY_NAMES = vscode.workspace
+  .getConfiguration()
+  .get<string[]>(TestifyProperties.testDirectoryNames) ?? [
+  "__tests__",
+  "__test__",
+  "tests",
+  "test",
+];
 
 const findNearestTestDirectory = async (
   startDir: string

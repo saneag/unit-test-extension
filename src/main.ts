@@ -3,16 +3,23 @@ import * as vscode from "vscode";
 import { createTestFileCommand } from "./commands/createTestFileCommand";
 import { openTestFileCommand } from "./commands/openTestFileCommand";
 import { openSourceFileCommand } from "./commands/openSourceFileCommand";
+import { healthCheck } from "./helpers/healthCheckHelpers";
 
 export function activate(context: vscode.ExtensionContext) {
-  const commands = [
-    createTestFileCommand,
-    openTestFileCommand,
-    openSourceFileCommand,
-  ];
+  try {
+    healthCheck(context);
 
-  for (const command of commands) {
-    context.subscriptions.push(command);
+    const commands = [
+      createTestFileCommand,
+      openTestFileCommand,
+      openSourceFileCommand,
+    ];
+
+    for (const command of commands) {
+      context.subscriptions.push(command);
+    }
+  } catch (error) {
+    console.error("Error activating extension:", error);
   }
 }
 
