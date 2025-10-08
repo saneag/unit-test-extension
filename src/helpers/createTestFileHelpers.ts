@@ -96,11 +96,12 @@ export const createAndOpenTestFile = async (
 ): Promise<void> => {
   await createTestFile(fileNameWithPath, testFileNameWithPath);
 
-  const isOpenFileInEditor = vscode.workspace
-    .getConfiguration()
-    .get<boolean>(UnitTestHelperCommands.openTestFile);
+  const shouldOpenFile =
+    vscode.workspace
+      .getConfiguration()
+      .get<boolean>(UnitTestHelperCommands.openTestFile) ?? true;
 
-  if (isOpenFileInEditor) {
+  if (shouldOpenFile) {
     await openFileInEditor(testFileNameWithPath);
   }
 };
