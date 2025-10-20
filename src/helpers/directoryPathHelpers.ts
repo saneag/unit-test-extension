@@ -22,8 +22,11 @@ const findNearestTestDirectory = async (
   startDir: string
 ): Promise<TestDirectoryMatch | null> => {
   let currentDir = startDir;
+  let isFinalAttempt = false;
 
-  while (true) {
+  do {
+    isFinalAttempt = !currentDir.includes("src");
+
     for (const dirName of TEST_DIRECTORY_NAMES) {
       const candidate = path.join(currentDir, dirName);
 
@@ -49,7 +52,7 @@ const findNearestTestDirectory = async (
     }
 
     currentDir = parentDir;
-  }
+  } while (!isFinalAttempt);
 
   return null;
 };

@@ -1,14 +1,15 @@
+import path from "path";
 import { SCRIPT_EXTENSION_REGEX } from "../constants/common";
 
 export const getFileNameWithExtension = (fileNameWithPath: string): string => {
-  return fileNameWithPath.split("/").pop() || "";
+  return path.basename(fileNameWithPath) || "";
 };
 
 export const getFileNameWithoutExtension = (
   fileNameWithPath: string
 ): string => {
   return (
-    fileNameWithPath.split("/").pop()?.replace(SCRIPT_EXTENSION_REGEX, "") || ""
+    path.basename(fileNameWithPath).replace(SCRIPT_EXTENSION_REGEX, "") || ""
   );
 };
 
