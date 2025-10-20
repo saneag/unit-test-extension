@@ -1,11 +1,25 @@
-<!-- Write me a README for my unit-test-helper extension -->
-
 # Unit Test Helper
 
-A Visual Studio Code extension that helps you quickly create unit test files for your source code files. It works by generating a test file in the closest test directory (like `test` or `__test__`) relative to the current file, or in the same directory if no test directory is found.
+A Visual Studio Code extension that helps you quickly create unit test files for your source code files. It works by generating a test file in the closest test directory relative to the current file, or in the same directory if no test directory is found.
 
 ## Features
 
-- **Create Test File**: Automatically generates a test file for the currently active source code file.
-- **Smart Directory Detection**: Searches for the nearest test directory (`test` or `__test__`) to place the new test file. If none is found, it creates the test file in the same directory as the source file.
-- **Error Handling**: Provides informative error messages if the operation cannot be completed (e.g., if the active file is already a test file or if a test file already exists).
+- Automatically generates a test file for the currently active source code file and opens it in new tab when you run **Testify: Create Test File** command.
+- Searches for the nearest test directory (**test**, **\_\_test\_\_**, **tests**, **\_\_tests\_\_**) to place the new test file. If none is found, it creates the test file in the same directory as the source file.
+- Opens the test file that corresponds to the currently active source code file.
+- Opens the source file that corresponds to the currently active test file.
+- Provides informative error messages if the operation cannot be completed (e.g., if the active file is already a test file or if a test file already exists).
+
+## Commands
+
+- **Testify: Create Test File**: Generates a unit test file for the currently active source code file.
+- **Testify: Open Test File**: Opens the test file corresponding to the currently active source code file.
+- **Testify: Open Source File**: Opens the source code file corresponding to the currently active test file.
+
+## Configurations
+
+> **Open source file**: Toggles the command to open the source file from a test file automatically.
+
+> **Open test file**: Toggles the command to open the test file from a source file automatically.
+
+> **Test Directory Names**: Configurable list of directory names to search for test files (default: **test**, **\_\_test\_\_**, **tests**, **\_\_tests\_\_**).

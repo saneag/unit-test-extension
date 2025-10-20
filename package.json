@@ -8,7 +8,7 @@
   },
   "icon": "assets/testify.webp",
   "description": "A VSCode extension to help you create unit test files quickly and easily.",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "pricing": "Free",
   "engines": {
     "vscode": "^1.104.0"
