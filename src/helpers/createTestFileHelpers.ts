@@ -58,7 +58,8 @@ export const createTestFileContent = async (fileNameWithPath: string) => {
 
 export const createTestFile = async (
   fileNameWithPath: string,
-  testFileNameWithPath: string
+  testFileNameWithPath: string,
+  isBulkCreation = false
 ): Promise<void> => {
   try {
     const testFileDirectory = path.dirname(testFileNameWithPath);
@@ -72,9 +73,11 @@ export const createTestFile = async (
       Buffer.from(testFileContent, "utf8")
     );
 
-    vscode.window.showInformationMessage(
-      `Test file created: ${testFileNameWithPath}`
-    );
+    if (!isBulkCreation) {
+      vscode.window.showInformationMessage(
+        `Test file created: ${testFileNameWithPath}`
+      );
+    }
   } catch (error) {
     throw new CreationFileError(
       `Failed to create test file: ${
@@ -86,9 +89,10 @@ export const createTestFile = async (
 
 export const createAndOpenTestFile = async (
   fileNameWithPath: string,
-  testFileNameWithPath: string
+  testFileNameWithPath: string,
+  isBulkCreation = false
 ): Promise<void> => {
-  await createTestFile(fileNameWithPath, testFileNameWithPath);
+  await createTestFile(fileNameWithPath, testFileNameWithPath, isBulkCreation);
 
   const shouldOpenFile =
     vscode.workspace

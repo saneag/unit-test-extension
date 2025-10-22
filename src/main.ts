@@ -4,7 +4,7 @@ import { createTestFileCommand } from "./commands/createTestFileCommand";
 import { openTestFileCommand } from "./commands/openTestFileCommand";
 import { openSourceFileCommand } from "./commands/openSourceFileCommand";
 import { healthCheck } from "./helpers/healthCheckHelpers";
-import { createTestFilesForSelectedDirectory } from "./commands/createTestFilesForSelectedDirectory";
+import { createTestFilesForSelectionCommand } from "./commands/createTestFilesForSelectionCommand";
 
 export function activate(context: vscode.ExtensionContext) {
   try {
@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
       createTestFileCommand,
       openTestFileCommand,
       openSourceFileCommand,
-      createTestFilesForSelectedDirectory,
+      createTestFilesForSelectionCommand,
     ];
 
     for (const command of commands) {

@@ -5,7 +5,7 @@ const RawTestifyCommands = {
   createTestFile: "createTestFile",
   openTestFile: "openTestFile",
   openSourceFile: "openSourceFile",
-  createTestFilesForSelectedDirectory: "createTestFilesForSelectedDirectory",
+  createTestFilesForSelection: "createTestFilesForSelection",
 };
 
 export const UnitTestHelperCommands = AddPrefixToKeys(

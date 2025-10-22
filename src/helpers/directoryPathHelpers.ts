@@ -181,3 +181,16 @@ export const openSourceFileInEditorPrompt = async (
     return true;
   }
 };
+
+export const isDirectory = async (uri: vscode.Uri) => {
+  try {
+    const stat = await vscode.workspace.fs.stat(uri);
+    return stat.type === vscode.FileType.Directory;
+  } catch (error: any) {
+    if (isFileNotFoundError(error)) {
+      return false;
+    }
+
+    throw error;
+  }
+};

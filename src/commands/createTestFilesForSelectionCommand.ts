@@ -3,9 +3,9 @@ import { UnitTestHelperCommands } from "../constants/commands";
 import { handleErrorMessage } from "../helpers/errorHandlers";
 import { createUnitTestsForAllFiles } from "../helpers/createTestFilesForSelectedDirectoryHelpers";
 
-export const createTestFilesForSelectedDirectory =
+export const createTestFilesForSelectionCommand =
   vscode.commands.registerCommand(
-    UnitTestHelperCommands.createTestFilesForSelectedDirectory,
+    UnitTestHelperCommands.createTestFilesForSelection,
     async (uri: vscode.Uri) => {
       try {
         await createUnitTestsForAllFiles(uri);

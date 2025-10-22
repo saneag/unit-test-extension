@@ -8,6 +8,8 @@ A Visual Studio Code extension that helps you quickly create unit test files for
 - Searches for the nearest test directory (**test**, **\_\_test\_\_**, **tests**, **\_\_tests\_\_**) to place the new test file. If none is found, it creates the test file in the same directory as the source file.
 - Opens the test file that corresponds to the currently active source code file.
 - Opens the source file that corresponds to the currently active test file.
+- Creates test files for multiple selected files in the Explorer view.
+- Creates test files for all files in the currently selected directory.
 - Provides informative error messages if the operation cannot be completed (e.g., if the active file is already a test file or if a test file already exists).
 
 ## Commands
@@ -15,6 +17,7 @@ A Visual Studio Code extension that helps you quickly create unit test files for
 - **Testify: Create Test File**: Generates a unit test file for the currently active source code file.
 - **Testify: Open Test File**: Opens the test file corresponding to the currently active source code file.
 - **Testify: Open Source File**: Opens the source code file corresponding to the currently active test file.
+- **Testify: Create Test Files**: Generates unit test files for all selected files in the Explorer view or for all files in the selected directory.
 
 ## Configurations
 
