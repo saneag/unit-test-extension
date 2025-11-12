@@ -18,6 +18,50 @@ export const TEST_DIRECTORY_NAMES = vscode.workspace
   "test",
 ];
 
+const TS_SCRIPT_EXTENSIONS: readonly string[] = [".ts", ".tsx"];
+
+const getTsExtensionVariants = (filePath: string): string[] => {
+  const ext = path.extname(filePath);
+  const extLower = ext.toLowerCase();
+
+  if (!TS_SCRIPT_EXTENSIONS.includes(extLower)) {
+    return [filePath];
+  }
+
+  const basePath = filePath.slice(0, -ext.length);
+  const orderedExtensions =
+    extLower === ".ts" ? TS_SCRIPT_EXTENSIONS : [...TS_SCRIPT_EXTENSIONS].reverse();
+
+  return orderedExtensions.map((extension) => `${basePath}${extension}`);
+};
+
+const doesFileExist = async (filePath: string): Promise<boolean> => {
+  try {
+    await vscode.workspace.fs.stat(vscode.Uri.file(filePath));
+    return true;
+  } catch (error: any) {
+    if (isFileNotFoundError(error)) {
+      return false;
+    }
+
+    throw error;
+  }
+};
+
+const findExistingTsVariant = async (
+  filePath: string
+): Promise<string | null> => {
+  for (const candidate of getTsExtensionVariants(filePath)) {
+    const exists = await doesFileExist(candidate);
+
+    if (exists) {
+      return candidate;
+    }
+  }
+
+  return null;
+};
+
 const findNearestTestDirectory = async (
   startDir: string
 ): Promise<TestDirectoryMatch | null> => {
@@ -119,10 +163,10 @@ export const resolveSourceFilePath = (testFileNameWithPath: string): string => {
 
 export const checkIfTestFileExistsAndOpen = async (filePath: string) => {
   try {
-    const fileStat = await vscode.workspace.fs.stat(vscode.Uri.file(filePath));
+    const fileToOpen = await findExistingTsVariant(filePath);
 
-    if (fileStat) {
-      await openFileInEditor(filePath);
+    if (fileToOpen) {
+      await openFileInEditor(fileToOpen);
       return true;
     }
   } catch (error: any) {
@@ -159,6 +203,16 @@ export const openSourceFileInEditorPrompt = async (
   }
 
   const sourceFileNameWithPath = resolveSourceFilePath(testFileNameWithPath);
+  const existingSourceFilePath = await findExistingTsVariant(
+    sourceFileNameWithPath
+  );
+
+  if (!existingSourceFilePath) {
+    vscode.window.showWarningMessage(
+      `Source file could not be found for: ${fileName}`
+    );
+    return false;
+  }
 
   const isOpenSourceFileAutomaticallyEnabled =
     vscode.workspace
@@ -166,7 +220,7 @@ export const openSourceFileInEditorPrompt = async (
       .get<boolean>(TestifyProperties.openSourceFile) ?? true;
 
   if (!showPrompt && isOpenSourceFileAutomaticallyEnabled) {
-    await openFileInEditor(sourceFileNameWithPath);
+    await openFileInEditor(existingSourceFilePath);
     return true;
   }
 
@@ -177,7 +231,7 @@ export const openSourceFileInEditorPrompt = async (
   );
 
   if (selection === "Open Source File") {
-    await openFileInEditor(sourceFileNameWithPath);
+    await openFileInEditor(existingSourceFilePath);
     return true;
   }
 };
