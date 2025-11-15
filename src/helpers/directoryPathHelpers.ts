@@ -68,8 +68,12 @@ const findNearestTestDirectory = async (
   let currentDir = startDir;
   let isFinalAttempt = false;
 
+  const folder = vscode.workspace.workspaceFolders?.[0];
+
   do {
-    isFinalAttempt = !currentDir.includes("src");
+    isFinalAttempt = folder?.name
+      ? currentDir.endsWith(folder?.name)
+      : currentDir.endsWith("src");
 
     for (const dirName of TEST_DIRECTORY_NAMES) {
       const candidate = path.join(currentDir, dirName);
