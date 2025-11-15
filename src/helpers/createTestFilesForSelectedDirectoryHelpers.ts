@@ -4,8 +4,8 @@ import { isDirectory, resolveTestFilePath } from "./directoryPathHelpers";
 import { createAndOpenTestFile } from "./createTestFileHelpers";
 import path from "path";
 
-const getAllFilesThatCanBeTested = async (rootUri: vscode.Uri) => {
-  const stack: vscode.Uri[] = [rootUri];
+const getAllFilesThatCanBeTested = async (selectedUris: vscode.Uri[]) => {
+  const stack: vscode.Uri[] = selectedUris;
   const result: vscode.Uri[] = [];
   let wasWarningShown = false;
 
@@ -60,8 +60,10 @@ const getAllFilesThatCanBeTested = async (rootUri: vscode.Uri) => {
   return result;
 };
 
-export const createUnitTestsForAllFiles = async (uri: vscode.Uri) => {
-  const files = await getAllFilesThatCanBeTested(uri);
+export const createUnitTestsForAllFiles = async (
+  selectedUris: vscode.Uri[]
+) => {
+  const files = await getAllFilesThatCanBeTested(selectedUris);
 
   const resolvedPaths = await Promise.all(
     files.map(async (file) => ({

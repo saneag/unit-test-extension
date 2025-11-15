@@ -6,9 +6,10 @@ import { createUnitTestsForAllFiles } from "../helpers/createTestFilesForSelecte
 export const createTestFilesForSelectionCommand =
   vscode.commands.registerCommand(
     UnitTestHelperCommands.createTestFilesForSelection,
-    async (uri: vscode.Uri) => {
+    async (uri: vscode.Uri, uris: vscode.Uri[]) => {
       try {
-        await createUnitTestsForAllFiles(uri);
+        const selectedUris = uris && uris.length > 0 ? uris : [uri];
+        await createUnitTestsForAllFiles(selectedUris);
       } catch (error) {
         handleErrorMessage(error);
       }
