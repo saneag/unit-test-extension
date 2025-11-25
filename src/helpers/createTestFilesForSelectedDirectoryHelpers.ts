@@ -1,6 +1,10 @@
 import * as vscode from "vscode";
 import { SCRIPT_EXTENSION_REGEX, TEST_REGEX } from "../constants/common";
-import { isDirectory, resolveTestFilePath } from "./directoryPathHelpers";
+import {
+  checkIfTestFileExistsAndOpen,
+  isDirectory,
+  resolveTestFilePath,
+} from "./directoryPathHelpers";
 import { createAndOpenTestFile } from "./createTestFileHelpers";
 import path from "path";
 
@@ -72,24 +76,35 @@ export const createUnitTestsForAllFiles = async (
     }))
   );
 
-  Promise.all(
-    resolvedPaths.map(
-      async ({ fileNameWithPath, testFileNameWithPath }) =>
-        await createAndOpenTestFile(
-          fileNameWithPath,
-          testFileNameWithPath,
-          true
-        )
-    )
-  ).then(() => {
-    if (resolvedPaths.length > 0) {
-      vscode.window.showInformationMessage(
-        `Created ${resolvedPaths.length} test file(s) successfully.`
-      );
-    } else {
-      vscode.window.showInformationMessage(
-        `No files found to create test files for.`
-      );
+  if (resolvedPaths.length === 0) {
+    vscode.window.showInformationMessage(
+      `No files found to create test files for.`
+    );
+    return;
+  }
+
+  let createdCount = 0;
+
+  for (const { fileNameWithPath, testFileNameWithPath } of resolvedPaths) {
+    const isTestFileOpened = await checkIfTestFileExistsAndOpen(
+      testFileNameWithPath
+    );
+
+    if (isTestFileOpened) {
+      continue;
     }
-  });
+
+    await createAndOpenTestFile(fileNameWithPath, testFileNameWithPath, true);
+    createdCount++;
+  }
+
+  if (createdCount > 0) {
+    vscode.window.showInformationMessage(
+      `Created ${createdCount} test file(s) successfully.`
+    );
+  } else {
+    vscode.window.showInformationMessage(
+      `No new test files created. Existing test files were opened instead.`
+    );
+  }
 };
