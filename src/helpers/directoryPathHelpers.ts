@@ -3,11 +3,14 @@ import * as vscode from "vscode";
 import {
   createTestFileNameWithExtension,
   getFileNameWithExtension,
+  TestFileVariant,
 } from "./fileNameHelpers";
 import { TEST_REGEX, TEST_SCRIPT_REGEX } from "../constants/common";
 import { TestDirectoryMatch } from "../types/types";
 import { isFileNotFoundError } from "./errorHandlers";
 import { TestifyProperties } from "../constants/properties";
+
+const TEST_FILE_VARIANTS: TestFileVariant[] = ["test", "spec"];
 
 export const TEST_DIRECTORY_NAMES = vscode.workspace
   .getConfiguration()
@@ -30,7 +33,9 @@ const getTsExtensionVariants = (filePath: string): string[] => {
 
   const basePath = filePath.slice(0, -ext.length);
   const orderedExtensions =
-    extLower === ".ts" ? TS_SCRIPT_EXTENSIONS : [...TS_SCRIPT_EXTENSIONS].reverse();
+    extLower === ".ts"
+      ? TS_SCRIPT_EXTENSIONS
+      : [...TS_SCRIPT_EXTENSIONS].reverse();
 
   return orderedExtensions.map((extension) => `${basePath}${extension}`);
 };
@@ -105,7 +110,7 @@ const findNearestTestDirectory = async (
   return null;
 };
 
-export const resolveTestFilePath = async (
+const resolveTargetFilePath = async (
   fileNameWithPath: string
 ): Promise<string> => {
   const fileDir = path.dirname(fileNameWithPath);
@@ -125,9 +130,33 @@ export const resolveTestFilePath = async (
     return path.join(match.testDir, relativeSubDir);
   })();
 
-  const targetFilePath = path.join(targetDir, path.basename(fileNameWithPath));
+  return path.join(targetDir, path.basename(fileNameWithPath));
+};
 
-  return createTestFileNameWithExtension(targetFilePath);
+export const resolveTestFilePath = async (
+  fileNameWithPath: string,
+  variant?: TestFileVariant
+): Promise<string> => {
+  const targetFilePath = await resolveTargetFilePath(fileNameWithPath);
+  const selectedVariant = variant ?? TEST_FILE_VARIANTS[0];
+
+  return createTestFileNameWithExtension(targetFilePath, selectedVariant);
+};
+
+export const resolveTestFilePathVariants = async (
+  fileNameWithPath: string,
+  variants?: TestFileVariant[]
+): Promise<string[]> => {
+  const targetFilePath = await resolveTargetFilePath(fileNameWithPath);
+  const variantsToUse =
+    variants && variants.length > 0 ? variants : TEST_FILE_VARIANTS;
+  const uniquePaths = new Set<string>();
+
+  for (const variant of variantsToUse) {
+    uniquePaths.add(createTestFileNameWithExtension(targetFilePath, variant));
+  }
+
+  return Array.from(uniquePaths);
 };
 
 export const resolveSourceFilePath = (testFileNameWithPath: string): string => {

@@ -1,6 +1,8 @@
 import path from "path";
 import { SCRIPT_EXTENSION_REGEX } from "../constants/common";
 
+export type TestFileVariant = "test" | "spec";
+
 export const getFileNameWithExtension = (fileNameWithPath: string): string => {
   return path.basename(fileNameWithPath) || "";
 };
@@ -14,7 +16,8 @@ export const getFileNameWithoutExtension = (
 };
 
 export const createTestFileNameWithExtension = (
-  fileNameWithPath: string
+  fileNameWithPath: string,
+  variant: TestFileVariant = "test"
 ): string => {
-  return fileNameWithPath.replace(SCRIPT_EXTENSION_REGEX, ".test.$1");
+  return fileNameWithPath.replace(SCRIPT_EXTENSION_REGEX, `.${variant}.$1`);
 };
