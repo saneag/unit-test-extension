@@ -10,7 +10,7 @@ import { TestDirectoryMatch } from "../types/types";
 import { isFileNotFoundError } from "./errorHandlers";
 import { TestifyProperties } from "../constants/properties";
 
-const TEST_FILE_VARIANTS: TestFileVariant[] = ["test", "spec"];
+const DEFAULT_TEST_FILE_VARIANTS: TestFileVariant[] = ["test", "spec"];
 
 export const TEST_DIRECTORY_NAMES = vscode.workspace
   .getConfiguration()
@@ -133,12 +133,32 @@ const resolveTargetFilePath = async (
   return path.join(targetDir, path.basename(fileNameWithPath));
 };
 
+const getPreferredTestFileVariant = (): TestFileVariant => {
+  const configuredVariant = vscode.workspace
+    .getConfiguration()
+    .get<TestFileVariant>(TestifyProperties.testFileVariant);
+
+  return configuredVariant === "spec" ? "spec" : "test";
+};
+
+const getTestFileVariants = (): TestFileVariant[] => {
+  const preferredVariant = getPreferredTestFileVariant();
+  const variants = DEFAULT_TEST_FILE_VARIANTS.filter(
+    (variant) => variant !== preferredVariant
+  );
+
+  variants.unshift(preferredVariant);
+
+  return variants;
+};
+
 export const resolveTestFilePath = async (
   fileNameWithPath: string,
   variant?: TestFileVariant
 ): Promise<string> => {
   const targetFilePath = await resolveTargetFilePath(fileNameWithPath);
-  const selectedVariant = variant ?? TEST_FILE_VARIANTS[0];
+  const preferredVariants = getTestFileVariants();
+  const selectedVariant = variant ?? preferredVariants[0];
 
   return createTestFileNameWithExtension(targetFilePath, selectedVariant);
 };
@@ -149,7 +169,7 @@ export const resolveTestFilePathVariants = async (
 ): Promise<string[]> => {
   const targetFilePath = await resolveTargetFilePath(fileNameWithPath);
   const variantsToUse =
-    variants && variants.length > 0 ? variants : TEST_FILE_VARIANTS;
+    variants && variants.length > 0 ? variants : getTestFileVariants();
   const uniquePaths = new Set<string>();
 
   for (const variant of variantsToUse) {

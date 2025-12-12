@@ -25,4 +25,6 @@ A Visual Studio Code extension that helps you quickly create unit test files for
 
 > **Open test file**: Toggles the command to open the test file from a source file automatically.
 
+> **Test file variant**: Choose the suffix for generated tests (**.test** or **.spec**, default: **.test**).
+
 > **Test Directory Names**: Configurable list of directory names to search for test files (default: **test**, **\_\_test\_\_**, **tests**, **\_\_tests\_\_**).

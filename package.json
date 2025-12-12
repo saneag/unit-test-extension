@@ -8,7 +8,7 @@
   },
   "icon": "assets/testify.webp",
   "description": "A VSCode extension to help you create unit test files quickly and easily.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "pricing": "Free",
   "engines": {
     "vscode": "^1.104.0"
@@ -64,6 +64,15 @@
           "type": "boolean",
           "default": true,
           "description": "Automatically open the source file in the editor after creating or opening a test file."
+        },
+        "testify.testFileVariant": {
+          "type": "string",
+          "enum": [
+            "test",
+            "spec"
+          ],
+          "default": "test",
+          "description": "Preferred suffix for generated test files. Choose between .test and .spec."
         },
         "testify.testDirectoryNames": {
           "type": "array",
